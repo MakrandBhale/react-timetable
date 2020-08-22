@@ -5,7 +5,7 @@ import './Cell.css'
 import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
 import Paper from '@material-ui/core/Paper';
-import { withStyles, useStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 
 const styles = theme => ({
@@ -48,7 +48,7 @@ class Cell extends Component {
         this.setState({
             isHovering: false
         })
-        
+
     }
 
     saveToStorage(key, value) {
@@ -90,7 +90,7 @@ class Cell extends Component {
     handlePaperClick = () => {
         let url = this.state.data.meetLink;
         console.log(url)
-        if(url === undefined) return;
+        if (url === undefined) return;
         let win = window.open(new URL(url), '_blank');
         win.focus();
     }
@@ -102,19 +102,14 @@ class Cell extends Component {
             return (
                 <div >
                     <div id="edit-icon" className="container-div"
-                        onMouseEnter={this.handleMouseEnter}
-                        onMouseLeave={this.handleMouseExit}
+                    // onMouseEnter={this.handleMouseEnter}
+                    // onMouseLeave={this.handleMouseExit}
                     >
-                        {
-                            (this.state.isHovering) ?
-                                <div>
-
-                                    <IconButton aria-label="edit" onClick={this.showDialog}>
-                                        <CreateIcon fontSize="inherit" />
-                                    </IconButton>
-                                </div>
-                                : ""
-                        }
+                        <div>
+                            <IconButton aria-label="edit" onClick={this.showDialog}>
+                                <CreateIcon fontSize="inherit" />
+                            </IconButton>
+                        </div>
                     </div>
                     <div id="dialog-container">
                         {
