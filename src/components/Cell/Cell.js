@@ -61,7 +61,8 @@ class Cell extends Component {
 
     getDataFromStorage(key) {
         let data = localStorage.getItem(key);
-        if (data == null) return;
+        console.log(data)
+        if (data === null || data === undefined) return;
         this.setState({
             data: JSON.parse(data)
         })
@@ -89,7 +90,7 @@ class Cell extends Component {
     handlePaperClick = () => {
         let url = this.state.data.meetLink;
         console.log(url)
-        if(url == undefined) return;
+        if(url === undefined) return;
         let win = window.open(new URL(url), '_blank');
         win.focus();
     }
@@ -97,7 +98,7 @@ class Cell extends Component {
     render() {
         const { classes } = this.props;
 
-        if (this.state.data == null) {
+        if (this.state.data === null) {
             return (
                 <div >
                     <div id="edit-icon" className="container-div"

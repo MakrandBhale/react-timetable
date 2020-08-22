@@ -39,7 +39,7 @@ const SimpleTable = () => {
   keysCollection.forEach(
     (key, index) => {
       if(localStorage.getItem(key) === null || localStorage.getItem(key) === undefined){
-        localStorage.setItem(key, sample[key]);
+        localStorage.setItem(key, JSON.stringify(sample[key]));
       }
     }
   );
