@@ -14,11 +14,13 @@ class AddDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            subjectName: '',
-            facultyName: '',
-            meetLink: '',
-            lectureType: 0,
-            isDialogOpen: true
+            subjectName: this.props.data === null ? "" : this.props.data.subjectName,
+            facultyName: this.props.data === null ? "" : this.props.data.facultyName,
+            meetLink: this.props.data === null ? "" : this.props.data.meetLink,
+            lectureType: this.props.data === null ? 0 : 1,
+            isDialogOpen: true,
+            urlError: false,
+            errorMessage: ""
         }
         this.handleFacultyChange = this.handleFacultyChange.bind(this);
         this.handleSubjectChange = this.handleSubjectChange.bind(this);
@@ -26,9 +28,16 @@ class AddDialog extends Component {
         this.dialogOnClose = this.dialogOnClose.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
     }
-
+    
     handleAdd = () => {
         //console.log(this.state.subjectName);
+        if(this.state.urlError) {
+            this.setState({
+                errorMessage: "Invalid URL"
+            });
+            return;
+        }
+
         const obj = {
             subjectName: this.state.subjectName,
             facultyName: this.state.facultyName,
@@ -37,6 +46,7 @@ class AddDialog extends Component {
         };
         const key = this.props.row + "x" + this.props.column;
         this.dialogOnClose();
+        this.props.dialogCloseHandler();
         this.props.onInfoEntered(key, JSON.stringify(obj));
 
     }
@@ -54,9 +64,22 @@ class AddDialog extends Component {
     }
 
     handleMeetLink = (event) => {
-        this.setState({
-            meetLink: event.target.value
-        })
+        try {
+            let url = new URL(event.target.value)
+            this.setState({
+                urlError: false,
+                meetLink: event.target.value,
+                errorMessage: ""
+
+            })
+        } catch (err) {
+            this.setState({
+                urlError: true,
+                meetLink: event.target.value,
+                errorMessage: "Invalid URL"
+            })
+        }
+        
     }
 
     handelLectureType = (event) => {
@@ -70,6 +93,8 @@ class AddDialog extends Component {
             isDialogOpen: false
         })
     }
+
+
     render() {
         return (
             <div>
@@ -80,11 +105,12 @@ class AddDialog extends Component {
                         <TextField
                             autoFocus
                             margin="dense"
-                            id="subjeuctName"
+                            id="subjectName"
                             label="Subject Name"
                             type="text"
                             fullWidth
                             variant="outlined"
+                            value = {this.state.subjectName}
                             onChange={this.handleSubjectChange}
                         />
                         <TextField
@@ -95,6 +121,7 @@ class AddDialog extends Component {
                             fullWidth
                             variant="outlined"
                             onChange={this.handleFacultyChange}
+                            value = {this.state.facultyName}
                         />
                         <FormControl variant="outlined" fullWidth margin="dense">
                             <InputLabel id="demo-simple-select-outlined-label">Lecture Type</InputLabel>
@@ -105,8 +132,8 @@ class AddDialog extends Component {
                                 onChange={this.handelLectureType}
                                 label="Lecture Type"
                             >
-                                <MenuItem value={0}>Theory</MenuItem>
-                                <MenuItem value={1}>Lab</MenuItem>
+                                <MenuItem value={0} >Theory</MenuItem>
+                                <MenuItem value={1} selected={true}>Lab</MenuItem>
                             </Select>
                         </FormControl>
                         <TextField
@@ -117,6 +144,9 @@ class AddDialog extends Component {
                             fullWidth
                             variant="outlined"
                             onChange={this.handleMeetLink}
+                            value = {this.state.meetLink}
+                            error = {this.state.urlError}
+                            helperText = {this.state.errorMessage}
                         />
                         <DialogActions>
                             <Button onClick={this.props.dialogCloseHandler} color="primary">Close</Button>
