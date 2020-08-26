@@ -52,7 +52,14 @@ class CurrentLecture extends Component {
         this.handleMenuClose = this.handleMenuClose.bind(this);
         this.handleEditClick = this.handleEditClick.bind(this);
         this.handleDeleteClick = this.handleDeleteClick.bind(this);
+        this.handleCopyClick = this.handleCopyClick.bind(this);
     }
+
+    handleCopyClick = () => {
+        localStorage.setItem("copiedLecture", JSON.stringify(this.props.data));
+        this.handleMenuClose();
+    }
+
     handlePaperClick = () => {
         let url = this.props.data.meetLink;
 
@@ -97,7 +104,7 @@ class CurrentLecture extends Component {
             <Card className={classes.root}>
                 <CardContent>
                     <Box display="flex" alignItems="center">
-                        <Box flexGrow={1}>
+                        <Box flexGrow={1} onClick={this.props.expandHandler} style={{cursor: 'pointer'}}>
                             <Typography variant="h5" component="h2">
                                 {this.props.data.subjectName}
                             </Typography>
@@ -148,6 +155,7 @@ class CurrentLecture extends Component {
                                     open={Boolean(this.state.anchorEl)}
                                     onClose={this.handleMenuClose}
                                 >
+                                    <MenuItem onClick={this.handleCopyClick}>Copy</MenuItem>
                                     <MenuItem onClick={this.handleEditClick}>Edit</MenuItem>
                                     <MenuItem onClick={this.handleDeleteClick}>Delete</MenuItem>
                                 </Menu>

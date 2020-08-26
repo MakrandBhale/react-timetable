@@ -65,7 +65,7 @@ class AddDialog extends Component {
 
     handleMeetLink = (event) => {
         try {
-            let url = new URL(event.target.value)
+            new URL(event.target.value)
             this.setState({
                 urlError: false,
                 meetLink: event.target.value,

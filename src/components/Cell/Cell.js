@@ -4,9 +4,12 @@ import clsx from 'clsx';
 import './Cell.css'
 import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
+import PasteIcon from '../PasteIcon';
+
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import CurrentLecture from './CurrentLecture'
+import {Box} from "@material-ui/core";
 
 const styles = theme => ({
     root: {
@@ -44,7 +47,7 @@ class Cell extends Component {
                 meetLink: null,
                 lectureType: 0,
             },
-
+            hasCopiedCell: false,
             
         };
         this.showDialog = this.showDialog.bind(this);
@@ -54,8 +57,8 @@ class Cell extends Component {
         this.handlePaperClick = this.handlePaperClick.bind(this);
         this.edit = this.edit.bind(this);
         this.delete = this.delete.bind(this);
-
-        //console.log(this.state.data)
+        this.handlePasteClick = this.handlePasteClick.bind(this);
+        this.hasCopiedCell = this.hasCopiedCell.bind(this);
     }
 
     edit() {
@@ -64,6 +67,8 @@ class Cell extends Component {
     }
 
     delete() {
+        let key = this.props.row + "x" + this.props.column;
+        localStorage.setItem(key, null);
         this.setState({
             data: null
         })
@@ -104,8 +109,13 @@ class Cell extends Component {
     handleMouseEnter() {
 
         this.setState({
-            isHovering: true
+            isHovering: true,
         })
+        if(this.hasCopiedCell()){
+            this.setState({
+                hasCopiedCell: true
+            })
+        }
     }
 
     showDialog = () => {
@@ -120,6 +130,27 @@ class Cell extends Component {
         })
     }
 
+    handlePasteClick = () => {
+        if(!this.hasCopiedCell()){
+            return;
+        }
+        let data = localStorage.getItem("copiedLecture");
+        try{
+            this.saveToStorage(this.props.row + "x" + this.props.column, data);
+        } catch (err) {
+            alert(err);
+        }
+
+    }
+
+    hasCopiedCell= () => {
+        let data = localStorage.getItem("copiedLecture");
+
+        return !(data === null || data === undefined);
+
+    }
+
+
     handlePaperClick = () => {
         // let url = this.state.data.meetLink;
         // console.log(url)
@@ -131,6 +162,7 @@ class Cell extends Component {
         })
         //console.log(this.state.isExpanded)
     }
+
 
     render() {
         const { classes } = this.props;
@@ -145,15 +177,25 @@ class Cell extends Component {
                     <div id="edit-icon" className="container-div"
                         onMouseEnter={this.handleMouseEnter}
                         onMouseLeave={this.handleMouseExit}
-                        onClick={this.showDialog}
+
                     >
                         {
                             (this.state.isHovering) ?
                                 <div>
-
-                                    <IconButton aria-label="edit" >
-                                        <CreateIcon fontSize="inherit" />
+                                    <Box alignItems="center">
+                                    <IconButton style={{ marginRight: 8 }} aria-label="edit" onClick={this.showDialog}>
+                                        <CreateIcon />
                                     </IconButton>
+                                    {
+                                        (this.state.hasCopiedCell) ?
+                                            <IconButton aria-label="paste" onClick={this.handlePasteClick}>
+                                                <PasteIcon  />
+                                            </IconButton>
+                                            :
+                                            ""
+                                    }
+
+                                    </Box>
                                 </div>
                                 : ""
                         }
@@ -167,7 +209,7 @@ class Cell extends Component {
                 [classes.currentLecture] : this.state.isExpanded //only when open === true
             })
             return (
-                <div>
+                <div style={{padding: 8}}>
                 {(!this.state.isExpanded ) ? 
                 <Paper className={paperClasses} onClick={this.handlePaperClick}>
                     <div id="details" className={classes.childDiv}>
