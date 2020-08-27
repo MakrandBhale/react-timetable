@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/react-timetable/static/css/main.6b3e6ed6.chunk.css",
-    "main.js": "/react-timetable/static/js/main.18565c7c.chunk.js",
-    "main.js.map": "/react-timetable/static/js/main.18565c7c.chunk.js.map",
+    "main.js": "/react-timetable/static/js/main.72f6c162.chunk.js",
+    "main.js.map": "/react-timetable/static/js/main.72f6c162.chunk.js.map",
     "runtime-main.js": "/react-timetable/static/js/runtime-main.256cf90c.js",
     "runtime-main.js.map": "/react-timetable/static/js/runtime-main.256cf90c.js.map",
     "static/js/2.65fc73ea.chunk.js": "/react-timetable/static/js/2.65fc73ea.chunk.js",
     "static/js/2.65fc73ea.chunk.js.map": "/react-timetable/static/js/2.65fc73ea.chunk.js.map",
     "index.html": "/react-timetable/index.html",
-    "precache-manifest.6836a4ca1777a62d78dd4f39a8b88ef4.js": "/react-timetable/precache-manifest.6836a4ca1777a62d78dd4f39a8b88ef4.js",
+    "precache-manifest.b1ef15f17dac6fbc6bd06c08002be5d2.js": "/react-timetable/precache-manifest.b1ef15f17dac6fbc6bd06c08002be5d2.js",
     "service-worker.js": "/react-timetable/service-worker.js",
     "static/css/main.6b3e6ed6.chunk.css.map": "/react-timetable/static/css/main.6b3e6ed6.chunk.css.map",
     "static/js/2.65fc73ea.chunk.js.LICENSE.txt": "/react-timetable/static/js/2.65fc73ea.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.256cf90c.js",
     "static/js/2.65fc73ea.chunk.js",
     "static/css/main.6b3e6ed6.chunk.css",
-    "static/js/main.18565c7c.chunk.js"
+    "static/js/main.72f6c162.chunk.js"
   ]
 }
