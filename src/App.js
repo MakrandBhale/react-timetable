@@ -14,6 +14,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import {Box} from "@material-ui/core";
 
 
 const styles = theme => ({
@@ -31,17 +32,31 @@ const styles = theme => ({
     paddingLeft: 18,
     paddingTop: 18,
     paddingRight: 18,
+  },
+
+  betaIconStyle: {
+    height:20,
+    fontSize: 12,
+    padding: '2px 4px 0px 4px',
+    minWidth: 36,
+    marginLeft: 4,
+    marginBottom: 12,
   }
 });
 
 class App extends Component {
   constructor(props) {
     super(props);
+    this.clicks = 0;
+    this.timer = null;
+    this.timeout = 350;
+
     this.state = ({
       showExportDialog: false,
       exportData: null,
       showImportDialog: false,
-      anchorEl: false
+      anchorEl: false,
+      enableBeta: false,
     })
     this.export = this.export.bind(this);
     this.closeDialog = this.closeDialog.bind(this);
@@ -49,7 +64,7 @@ class App extends Component {
     this.closeImportDialog = this.closeImportDialog.bind(this);
     this.handleMenuClick = this.handleMenuClick.bind(this);
     this.handleMenuClose = this.handleMenuClose.bind(this);
-
+    this.enableBeta = this.enableBeta.bind(this);
   }
 
   export() {
@@ -59,6 +74,38 @@ class App extends Component {
       exportData: data,
       showExportDialog: true,
     })
+  }
+
+  componentDidMount() {
+    const enableBeta = localStorage.getItem("enableBeta");
+    if(enableBeta === null || enableBeta === undefined) {
+      return;
+    }
+    if(enableBeta === '1'){
+      this.setState({
+        enableBeta: true,
+      })
+    }
+  }
+
+  enableBeta = (e) => {
+    if(e.detail !== 3) return
+    if(this.state.enableBeta) {
+      this.setState({
+        enableBeta: false
+      })
+      localStorage.removeItem("enableBeta");
+
+      alert("Experimental features are now disabled.");
+
+    } else {
+      this.setState({
+        enableBeta: true
+      })
+      alert("Experimental features are enabled.")
+      localStorage.setItem("enableBeta", '1');
+    }
+    window.location.reload();
   }
 
   handleMenuClose = () => {
@@ -101,7 +148,20 @@ class App extends Component {
               <MenuIcon />
             </IconButton> */}
             <Typography variant="h6" className={classes.title}>
-              Timetable
+              <span style={{cursor: "pointer"}} onClick={this.enableBeta}>Timetable</span>
+              {
+                (this.state.enableBeta) ?
+                    <Button className={classes.betaIconStyle}
+                            disableElevation={true}
+                            size={"small"}
+                            variant="contained"
+                    >
+                      BETA
+                    </Button>
+                    :
+                    null
+              }
+
             </Typography>
             <div>
               <IconButton aria-controls="context-action-menu" aria-haspopup="true" onClick={this.handleMenuClick} size="small">

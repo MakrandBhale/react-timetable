@@ -77,7 +77,7 @@ class Cell extends Component {
     componentDidMount() {
         this.getDataFromStorage(this.props.row + "x" + this.props.column);
         if(this.props.currentLecture){
-            console.log(this.props.row + "x" + this.props.column);
+            //console.log(this.props.row + "x" + this.props.column);
         }
     }
 
@@ -217,7 +217,7 @@ class Cell extends Component {
                     </div>
                 </Paper>
                 :
-                <CurrentLecture data={this.state.data} edit={this.edit} delete={this.delete} expandHandler={this.handlePaperClick} currentLecture={this.props.currentLecture}/>
+                <CurrentLecture data={this.state.data} edit={this.edit} delete={this.delete} expandHandler={this.handlePaperClick} currentLecture={this.props.currentLecture} row={this.props.row} column={this.props.column}/>
                 }
                 {this.state.isDialogShowing ? dialogContainer : ""}
                 </div>

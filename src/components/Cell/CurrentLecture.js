@@ -9,10 +9,13 @@ import CardContent from '@material-ui/core/CardContent';
 import Box from '@material-ui/core/Box';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-
+import TasksDialog from "../TasksDialog/TasksDialog";
+import {FlightTakeoff} from "@material-ui/icons";
 const styles = theme => ({
     root: {
         minWidth: 148,
@@ -46,6 +49,8 @@ class CurrentLecture extends Component {
 
         this.state = {
             anchorEl: false,
+            showToDoDialog: false,
+            betaEnabled: false
         }
         this.handlePaperClick = this.handlePaperClick.bind(this);
         this.handleMenuClick = this.handleMenuClick.bind(this);
@@ -53,6 +58,19 @@ class CurrentLecture extends Component {
         this.handleEditClick = this.handleEditClick.bind(this);
         this.handleDeleteClick = this.handleDeleteClick.bind(this);
         this.handleCopyClick = this.handleCopyClick.bind(this);
+        this.showToDoDialog = this.showToDoDialog.bind(this);
+        this.closeToDoDialog = this.closeToDoDialog.bind(this);
+    }
+
+    componentDidMount() {
+        const isBetaEnabled = localStorage.getItem("enableBeta");
+        if(isBetaEnabled === null || isBetaEnabled === undefined) return;
+        if(isBetaEnabled !== '1') return;
+
+        this.setState({
+            betaEnabled: isBetaEnabled
+        })
+
     }
 
     handleCopyClick = () => {
@@ -95,6 +113,18 @@ class CurrentLecture extends Component {
     handleDeleteClick =() => {
         this.props.delete();
         this.handleMenuClose();
+    }
+
+    showToDoDialog = () => {
+        this.setState({
+            showToDoDialog: true,
+        })
+    }
+
+    closeToDoDialog = () => {
+        this.setState({
+            showToDoDialog: false,
+        })
     }
 
     render() {
@@ -142,6 +172,20 @@ class CurrentLecture extends Component {
                             >
                                 Open
                             </Button>
+                            {
+                                (this.state.betaEnabled) ?
+                                <IconButton
+                                    size="small"
+                                    style={{marginLeft: 4}}
+                                    variant="contained"
+                                    aria-label={"Add task"}
+                                    onClick={this.showToDoDialog}
+                                >
+                                    <AssignmentIcon color="primary"/>
+                                </IconButton>
+                                    : null
+                            }
+
                         </Box>
                         <Box>
                             <div>
@@ -163,6 +207,8 @@ class CurrentLecture extends Component {
                         </Box>
                     </Box>
                 </CardActions>
+
+                <TasksDialog show={this.state.showToDoDialog} closeHandler={this.closeToDoDialog} row={this.props.row} column={this.props.column}/>
             </Card>
         )
 
